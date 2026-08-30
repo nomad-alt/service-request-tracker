@@ -1,5 +1,6 @@
 package com.example.servicerequesttracker.service;
 
+import com.example.servicerequesttracker.exception.TicketNotFoundException;
 import com.example.servicerequesttracker.model.Priority;
 import com.example.servicerequesttracker.model.Ticket;
 import com.example.servicerequesttracker.model.TicketStatus;
@@ -36,5 +37,31 @@ public class TicketService {
     @Transactional(readOnly = true)
     public List<Ticket> getTicketsByPriority(Priority priority) {
         return ticketRepository.findByPriority(priority);
+    }
+
+    @Transactional(readOnly = true)
+    public Ticket getTicketById(Long id) {
+        return ticketRepository.findById(id)
+                .orElseThrow(() -> new TicketNotFoundException(id));
+    }
+
+    public Ticket updateTicket(Long id, String title, String description, Priority priority) {
+        Ticket ticket = getTicketById(id);
+        ticket.setTitle(title);
+        ticket.setDescription(description);
+        ticket.setPriority(priority);
+
+        return ticketRepository.save(ticket);
+    }
+
+    public Ticket updateStatus(Long id, TicketStatus status) {
+        Ticket ticket = getTicketById(id);
+        ticket.setStatus(status);
+        return ticketRepository.save(ticket);
+    }
+
+    public void deleteTicket(Long id) {
+        Ticket ticket = getTicketById(id);
+        ticketRepository.delete(ticket);
     }
 }
