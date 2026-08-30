@@ -1,4 +1,4 @@
-package com.example.service_request_tracker;
+package com.example.servicerequesttracker;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

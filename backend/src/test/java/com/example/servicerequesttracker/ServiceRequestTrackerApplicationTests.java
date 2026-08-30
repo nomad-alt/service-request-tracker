@@ -1,4 +1,4 @@
-package com.example.service_request_tracker;
+package com.example.servicerequesttracker;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
