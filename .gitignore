@@ -1,0 +1,41 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE/editor files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+*.swp
+
+# Java / build output
+target/
+build/
+out/
+bin/
+*.class
+*.log
+
+# Eclipse
+.classpath
+.project
+.settings/
+.springBeans
+.sts4-cache/
+
+# Maven wrapper files should stay tracked
+# Keep these:
+# mvnw
+# mvnw.cmd
+# .mvn/
+
+# Optional: generated archives
+*.jar
+*.war
+*.ear
+
+# Test / coverage output
+coverage/
+test-output/
