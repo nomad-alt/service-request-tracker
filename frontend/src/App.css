@@ -33,6 +33,16 @@
   font-size: 2rem;
 }
 
+.brand-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.brand-link:focus-visible {
+  outline: 3px solid #f2a541;
+  outline-offset: 3px;
+}
+
 .dashboard {
   padding-top: 48px;
 }
@@ -54,8 +64,11 @@
   color: #52667d;
 }
 
-button {
+.primary-action {
   flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-height: 40px;
   padding: 0 16px;
   color: #ffffff;
@@ -65,11 +78,17 @@ button {
   font: inherit;
   font-weight: 700;
   cursor: pointer;
+  text-decoration: none;
 }
 
-button:hover {
+.primary-action:hover {
   background: #1158a7;
   border-color: #1158a7;
+}
+
+.primary-action:focus-visible {
+  outline: 3px solid #f2a541;
+  outline-offset: 3px;
 }
 
 .empty-state {
@@ -85,6 +104,11 @@ button:hover {
 
 .empty-state p {
   margin: 0;
+}
+
+.page-description {
+  margin: 8px 0 0;
+  color: #52667d;
 }
 
 @media (max-width: 640px) {
@@ -109,7 +133,7 @@ button:hover {
     flex-direction: column;
   }
 
-  .dashboard-heading button {
+  .dashboard-heading .primary-action {
     width: 100%;
   }
 }

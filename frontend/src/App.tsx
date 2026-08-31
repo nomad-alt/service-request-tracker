@@ -1,4 +1,8 @@
 import "./App.css";
+import { Link, Route, Routes } from "react-router";
+import CreateTicketPage from "./pages/CreateTicketPage";
+import TicketDashboard from "./pages/TicketDashboard";
+import TicketDetailsPage from "./pages/TicketDetailsPage";
 
 function App() {
   return (
@@ -6,22 +10,20 @@ function App() {
       <header className="site-header">
         <div className="page-width">
           <p className="section-label">Support Operations</p>
-          <h1>Service Request Tracker</h1>
+          <h1>
+            <Link className="brand-link" to="/">
+              Service Request Tracker
+            </Link>
+          </h1>
         </div>
       </header>
 
-      <main className="page-width dashboard">
-        <div className="dashboard-heading">
-          <div>
-            <h2>Ticket Dashboard</h2>
-            <p>Monitor, prioritize, and manage incoming service requests.</p>
-          </div>
-          <button type="button">Create ticket</button>
-        </div>
-
-        <section className="empty-state" aria-label="Ticket list">
-          <p>No tickets loaded yet</p>
-        </section>
+      <main className="page-width main-content">
+        <Routes>
+          <Route path="/" element={<TicketDashboard />} />
+          <Route path="/tickets/new" element={<CreateTicketPage />} />
+          <Route path="/tickets/:id" element={<TicketDetailsPage />} />
+        </Routes>
       </main>
     </div>
   );
