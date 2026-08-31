@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -11,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.servicerequesttracker.dto.TicketRequest;
 import com.example.servicerequesttracker.dto.TicketResponse;
+import com.example.servicerequesttracker.exception.TicketNotFoundException;
 import com.example.servicerequesttracker.model.Priority;
 import com.example.servicerequesttracker.model.TicketStatus;
 import com.example.servicerequesttracker.service.TicketService;
@@ -87,5 +89,45 @@ class TicketControllerTest {
                 .andExpect(jsonPath("$.fieldErrors.priority").value("Priority is required"));
 
         verifyNoInteractions(ticketService);
+    }
+
+    @Test
+    void getTicketById_whenFound_returns200() throws Exception {
+        Instant timestamp = Instant.parse("2026-08-31T10:00:00Z");
+        TicketResponse response = new TicketResponse(
+                1L,
+                "Printer unavailable",
+                "The office printer is offline",
+                Priority.HIGH,
+                TicketStatus.OPEN,
+                timestamp,
+                timestamp);
+
+        when(ticketService.getTicketById(1L)).thenReturn(response);
+
+        mockMvc.perform(get("/api/tickets/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.title").value("Printer unavailable"))
+                .andExpect(jsonPath("$.priority").value("HIGH"))
+                .andExpect(jsonPath("$.status").value("OPEN"));
+
+        verify(ticketService).getTicketById(1L);
+    }
+
+    @Test
+    void getTicketById_whenMissing_returns404ErrorResponse() throws Exception {
+        when(ticketService.getTicketById(999L))
+                .thenThrow(new TicketNotFoundException(999L));
+
+        mockMvc.perform(get("/api/tickets/999"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.error").value("Not Found"))
+                .andExpect(jsonPath("$.message").value("Ticket not found with id: 999"))
+                .andExpect(jsonPath("$.path").value("/api/tickets/999"))
+                .andExpect(jsonPath("$.fieldErrors").isEmpty());
+
+        verify(ticketService).getTicketById(999L);
     }
 }
