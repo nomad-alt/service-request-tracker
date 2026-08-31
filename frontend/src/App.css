@@ -91,6 +91,118 @@
   outline-offset: 3px;
 }
 
+.badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 2px 8px;
+  border: 1px solid;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.priority-badge--low {
+  color: #24633c;
+  background: #e7f5eb;
+  border-color: #b8ddc4;
+}
+
+.priority-badge--medium {
+  color: #714c00;
+  background: #fff3d6;
+  border-color: #e8ca7a;
+}
+
+.priority-badge--high {
+  color: #982f2f;
+  background: #fde8e8;
+  border-color: #e9b6b6;
+}
+
+.status-badge--open {
+  color: #175894;
+  background: #e5f1fc;
+  border-color: #b5d4f0;
+}
+
+.status-badge--in_progress {
+  color: #60419a;
+  background: #f0eafd;
+  border-color: #cdbdea;
+}
+
+.status-badge--closed {
+  color: #4f5f70;
+  background: #edf0f3;
+  border-color: #cbd3db;
+}
+
+.ticket-card {
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #dce2ea;
+  border-radius: 6px;
+}
+
+.ticket-list {
+  display: grid;
+  gap: 16px;
+}
+
+.ticket-card__title {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.125rem;
+}
+
+.ticket-card__title a {
+  color: #1769c2;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.ticket-card__title a:hover {
+  color: #1158a7;
+}
+
+.ticket-card__title a:focus-visible {
+  outline: 3px solid #f2a541;
+  outline-offset: 3px;
+}
+
+.ticket-card__description {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 10px 0 16px;
+  color: #52667d;
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.ticket-card__metadata {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.ticket-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ticket-card__date {
+  margin: 0;
+  color: #52667d;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
 .empty-state {
   display: grid;
   min-height: 180px;
@@ -135,5 +247,10 @@
 
   .dashboard-heading .primary-action {
     width: 100%;
+  }
+
+  .ticket-card__metadata {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }

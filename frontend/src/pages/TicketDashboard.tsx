@@ -1,4 +1,6 @@
 import { Link } from "react-router";
+import TicketCard from "../components/TicketCard";
+import { sampleTickets } from "../data/sampleTickets";
 
 function TicketDashboard() {
   return (
@@ -13,9 +15,17 @@ function TicketDashboard() {
         </Link>
       </div>
 
-      <section className="empty-state" aria-label="Ticket list">
-        <p>No tickets loaded yet</p>
-      </section>
+      {sampleTickets.length === 0 ? (
+        <section className="empty-state">
+          <p>No tickets found</p>
+        </section>
+      ) : (
+        <section className="ticket-list" aria-label="Ticket list">
+          {sampleTickets.map((ticket) => (
+            <TicketCard key={ticket.id} ticket={ticket} />
+          ))}
+        </section>
+      )}
     </div>
   );
 }
