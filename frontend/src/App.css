@@ -197,6 +197,24 @@
   font-size: 0.8125rem;
 }
 
+.request-state {
+  padding: 20px;
+  color: #52667d;
+  background: #ffffff;
+  border: 1px solid #dce2ea;
+  border-radius: 6px;
+}
+
+.request-state p {
+  margin: 0;
+}
+
+.request-state--error {
+  color: #982f2f;
+  background: #fff4f4;
+  border-color: #e9b6b6;
+}
+
 .ticket-card__title {
   margin: 0;
   font-family: Georgia, 'Times New Roman', serif;
