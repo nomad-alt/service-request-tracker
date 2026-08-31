@@ -91,6 +91,11 @@
   outline-offset: 3px;
 }
 
+.primary-action:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
 .badge {
   display: inline-flex;
   align-items: center;
@@ -344,6 +349,16 @@
   color: #24633c;
   background: #e7f5eb;
   border: 1px solid #b8ddc4;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.submit-error {
+  margin: 0;
+  padding: 12px;
+  color: #982f2f;
+  background: #fff4f4;
+  border: 1px solid #e9b6b6;
   border-radius: 4px;
   font-weight: 700;
 }

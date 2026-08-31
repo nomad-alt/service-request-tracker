@@ -1,4 +1,19 @@
-import type { Priority, Ticket, TicketStatus } from "../types/ticket";
+import type {
+  Priority,
+  Ticket,
+  TicketRequest,
+  TicketStatus,
+} from "../types/ticket";
+
+async function createResponseError(response: Response): Promise<Error> {
+  try {
+    const body = (await response.json()) as { message?: string };
+
+    return new Error(body.message ?? `Request failed (${response.status})`);
+  } catch {
+    return new Error(`Request failed (${response.status})`);
+  }
+}
 
 export async function getTickets(
   status: TicketStatus | "",
@@ -20,8 +35,24 @@ export async function getTickets(
   const response = await fetch(url, { signal });
 
   if (!response.ok) {
-    throw new Error(`Unable to load tickets (${response.status})`);
+    throw await createResponseError(response);
   }
 
   return response.json() as Promise<Ticket[]>;
+}
+
+export async function createTicket(request: TicketRequest): Promise<Ticket> {
+  const response = await fetch("/api/tickets", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(request),
+  });
+
+  if (!response.ok) {
+    throw await createResponseError(response);
+  }
+
+  return response.json() as Promise<Ticket>;
 }

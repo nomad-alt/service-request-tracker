@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { createTicket } from "../services/ticketApi";
 import type { Priority, TicketRequest } from "../types/ticket";
 
 interface FormErrors {
@@ -14,10 +15,11 @@ function CreateTicketPage() {
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState<Priority | "">("");
   const [errors, setErrors] = useState<FormErrors>({});
-  const [pendingRequest, setPendingRequest] =
-    useState<TicketRequest | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const nextErrors: FormErrors = {};
@@ -35,7 +37,7 @@ function CreateTicketPage() {
     }
 
     setErrors(nextErrors);
-    setPendingRequest(null);
+    setSubmitError(null);
 
     if (Object.keys(nextErrors).length > 0) {
       return;
@@ -51,7 +53,19 @@ function CreateTicketPage() {
       priority,
     };
 
-    setPendingRequest(request);
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      await createTicket(request);
+      navigate("/");
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error ? error.message : "Unable to create ticket",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -74,7 +88,7 @@ function CreateTicketPage() {
             aria-invalid={Boolean(errors.title)}
             onChange={(event) => {
               setTitle(event.currentTarget.value);
-              setPendingRequest(null);
+              setSubmitError(null);
             }}
           />
           {errors.title && (
@@ -97,7 +111,7 @@ function CreateTicketPage() {
             aria-invalid={Boolean(errors.description)}
             onChange={(event) => {
               setDescription(event.currentTarget.value);
-              setPendingRequest(null);
+              setSubmitError(null);
             }}
           />
           {errors.description && (
@@ -119,7 +133,7 @@ function CreateTicketPage() {
             aria-invalid={Boolean(errors.priority)}
             onChange={(event) => {
               setPriority(event.currentTarget.value as Priority | "");
-              setPendingRequest(null);
+              setSubmitError(null);
             }}
           >
             <option value="">Select priority</option>
@@ -135,17 +149,21 @@ function CreateTicketPage() {
         </div>
 
         <div className="form-actions">
-          <button className="primary-action" type="submit">
-            Create ticket
+          <button
+            className="primary-action"
+            type="submit"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Creating…" : "Create ticket"}
           </button>
           <Link className="secondary-action" to="/">
             Cancel
           </Link>
         </div>
 
-        {pendingRequest && (
-          <p className="submit-success" role="status">
-            Ticket is ready to submit.
+        {submitError && (
+          <p className="submit-error" role="alert">
+            {submitError}
           </p>
         )}
       </form>
