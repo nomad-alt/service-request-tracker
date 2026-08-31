@@ -57,3 +57,80 @@ flowchart LR
 | Frontend | React, TypeScript, Vite, Fetch API                    |
 | Testing  | JUnit 5, Mockito, MockMvc                             |
 | DevOps   | Docker, Docker Compose, GitHub Actions                |
+
+## Local Development
+
+Prerequisites:
+
+- Git
+- Docker Desktop
+- Docker Compose
+
+Clone the repository and start the complete application:
+
+```bash
+git clone https://github.com/nomad-alt/service-request-tracker.git
+cd service-request-tracker
+docker compose up --build
+```
+
+The following services will be available:
+
+| Service     | URL                                 |
+| ----------- | ----------------------------------- |
+| Frontend    | `http://localhost:3000`             |
+| Backend API | `http://localhost:8080/api/tickets` |
+| PostgreSQL  | `localhost:5433`                    |
+
+Stop the application with:
+
+```bash
+docker compose down
+```
+
+This removes the application containers but preserves PostgreSQL data in the
+Docker volume.
+
+## API Endpoints
+
+| Method   | Endpoint                   | Description            | Success status   |
+| -------- | -------------------------- | ---------------------- | ---------------- |
+| `POST`   | `/api/tickets`             | Create a ticket        | `201 Created`    |
+| `GET`    | `/api/tickets`             | List all tickets       | `200 OK`         |
+| `GET`    | `/api/tickets/{id}`        | Get one ticket         | `200 OK`         |
+| `PUT`    | `/api/tickets/{id}`        | Replace ticket details | `200 OK`         |
+| `PATCH`  | `/api/tickets/{id}/status` | Update ticket status   | `200 OK`         |
+| `DELETE` | `/api/tickets/{id}`        | Delete a ticket        | `204 No Content` |
+
+Tickets can be filtered by status or priority:
+
+```http
+GET /api/tickets?status=OPEN
+GET /api/tickets?priority=HIGH
+```
+
+Status and priority filters cannot currently be combined in a single request.
+
+### Example request
+
+```bash
+curl -X POST http://localhost:8080/api/tickets \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Unable to access account",
+    "description": "The password reset link has expired.",
+    "priority": "HIGH"
+  }'
+```
+
+Valid priority values:
+
+```text
+LOW, MEDIUM, HIGH
+```
+
+Valid status values:
+
+```text
+OPEN, IN_PROGRESS, CLOSED
+```
