@@ -2,6 +2,7 @@ package com.example.servicerequesttracker.controller;
 
 import com.example.servicerequesttracker.dto.TicketRequest;
 import com.example.servicerequesttracker.dto.TicketResponse;
+import com.example.servicerequesttracker.dto.UpdateTicketStatusRequest;
 import com.example.servicerequesttracker.model.Priority;
 import com.example.servicerequesttracker.model.TicketStatus;
 import com.example.servicerequesttracker.service.TicketService;
@@ -10,9 +11,12 @@ import java.net.URI;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,5 +66,27 @@ public class TicketController {
         }
 
         return ticketService.getAllTickets();
+    }
+
+    @PutMapping("/{id}")
+    public TicketResponse updateTicket(
+            @PathVariable Long id,
+            @Valid @RequestBody TicketRequest request) {
+
+        return ticketService.updateTicket(id, request);
+    }
+
+    @PatchMapping("/{id}/status")
+    public TicketResponse updateStatus(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateTicketStatusRequest request) {
+
+        return ticketService.updateStatus(id, request.status());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTicket(@PathVariable Long id) {
+        ticketService.deleteTicket(id);
+        return ResponseEntity.noContent().build();
     }
 }
