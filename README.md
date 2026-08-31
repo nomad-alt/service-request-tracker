@@ -32,6 +32,20 @@ persistence, validation, containerization, and continuous integration.
 - Global exception handling
 - Consistent API error responses
 
+## Screenshots
+
+### Ticket dashboard
+
+![Ticket dashboard showing service requests and filters](docs/screenshots/ticket-dashboard.png)
+
+### Create ticket
+
+![Form for creating a service request](docs/screenshots/create-ticket.png)
+
+### Ticket details
+
+![Ticket details page with status controls](docs/screenshots/ticket-details.png)
+
 ## Architecture
 
 ```mermaid
