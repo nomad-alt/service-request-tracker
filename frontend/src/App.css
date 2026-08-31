@@ -92,7 +92,7 @@
 }
 
 .primary-action:disabled {
-  cursor: wait;
+  cursor: not-allowed;
   opacity: 0.65;
 }
 
@@ -464,7 +464,8 @@
   border-top: 1px solid #dce2ea;
 }
 
-.status-form .submit-success {
+.status-form .submit-success,
+.status-form .submit-error {
   grid-column: 1 / -1;
 }
 

@@ -3,7 +3,7 @@ import type { FormEvent } from "react";
 import { Link, useParams } from "react-router";
 import PriorityBadge from "../components/PriorityBadge";
 import StatusBadge from "../components/StatusBadge";
-import { getTicket } from "../services/ticketApi";
+import { getTicket, updateTicketStatus } from "../services/ticketApi";
 import type {
   Ticket,
   TicketStatus,
@@ -23,8 +23,13 @@ function TicketDetailsPage() {
     useState<TicketStatus>("OPEN");
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [pendingStatusRequest, setPendingStatusRequest] =
-    useState<UpdateTicketStatusRequest | null>(null);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+  const [statusUpdateError, setStatusUpdateError] = useState<string | null>(
+    null,
+  );
+  const [statusUpdateMessage, setStatusUpdateMessage] = useState<string | null>(
+    null,
+  );
 
   useEffect(() => {
     if (!hasValidId) {
@@ -37,7 +42,8 @@ function TicketDetailsPage() {
       setIsLoading(true);
       setLoadError(null);
       setTicket(null);
-      setPendingStatusRequest(null);
+      setStatusUpdateError(null);
+      setStatusUpdateMessage(null);
 
       try {
         const result = await getTicket(ticketId, controller.signal);
@@ -62,14 +68,39 @@ function TicketDetailsPage() {
     return () => controller.abort();
   }, [ticketId, hasValidId]);
 
-  function handleStatusSubmit(event: FormEvent<HTMLFormElement>) {
+  const hasStatusChanged =
+    ticket !== null && selectedStatus !== ticket.status;
+
+  async function handleStatusSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if (!ticket || !hasStatusChanged) {
+      return;
+    }
 
     const request: UpdateTicketStatusRequest = {
       status: selectedStatus,
     };
 
-    setPendingStatusRequest(request);
+    setIsUpdatingStatus(true);
+    setStatusUpdateError(null);
+    setStatusUpdateMessage(null);
+
+    try {
+      const updatedTicket = await updateTicketStatus(ticket.id, request);
+
+      setTicket(updatedTicket);
+      setSelectedStatus(updatedTicket.status);
+      setStatusUpdateMessage("Status updated successfully.");
+    } catch (error) {
+      setStatusUpdateError(
+        error instanceof Error
+          ? error.message
+          : "Unable to update ticket status",
+      );
+    } finally {
+      setIsUpdatingStatus(false);
+    }
   }
 
   const requestError = hasValidId ? loadError : "Invalid ticket ID";
@@ -142,9 +173,11 @@ function TicketDetailsPage() {
               <select
                 id="ticket-status"
                 value={selectedStatus}
+                disabled={isUpdatingStatus}
                 onChange={(event) => {
                   setSelectedStatus(event.currentTarget.value as TicketStatus);
-                  setPendingStatusRequest(null);
+                  setStatusUpdateError(null);
+                  setStatusUpdateMessage(null);
                 }}
               >
                 <option value="OPEN">Open</option>
@@ -152,13 +185,23 @@ function TicketDetailsPage() {
                 <option value="CLOSED">Closed</option>
               </select>
             </div>
-            <button className="primary-action" type="submit">
-              Update status
+            <button
+              className="primary-action"
+              type="submit"
+              disabled={isUpdatingStatus || !hasStatusChanged}
+            >
+              {isUpdatingStatus ? "Updating…" : "Update status"}
             </button>
 
-            {pendingStatusRequest && (
+            {statusUpdateError && (
+              <p className="submit-error" role="alert">
+                {statusUpdateError}
+              </p>
+            )}
+
+            {statusUpdateMessage && (
               <p className="submit-success" role="status">
-                Status is ready to update.
+                {statusUpdateMessage}
               </p>
             )}
           </form>

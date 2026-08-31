@@ -3,6 +3,7 @@ import type {
   Ticket,
   TicketRequest,
   TicketStatus,
+  UpdateTicketStatusRequest,
 } from "../types/ticket";
 
 async function createResponseError(response: Response): Promise<Error> {
@@ -57,6 +58,25 @@ export async function getTicket(
 export async function createTicket(request: TicketRequest): Promise<Ticket> {
   const response = await fetch("/api/tickets", {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(request),
+  });
+
+  if (!response.ok) {
+    throw await createResponseError(response);
+  }
+
+  return response.json() as Promise<Ticket>;
+}
+
+export async function updateTicketStatus(
+  id: number,
+  request: UpdateTicketStatusRequest,
+): Promise<Ticket> {
+  const response = await fetch(`/api/tickets/${id}/status`, {
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
