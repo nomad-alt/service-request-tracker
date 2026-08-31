@@ -152,6 +152,51 @@
   gap: 16px;
 }
 
+.ticket-filters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 220px));
+  align-items: end;
+  gap: 16px;
+  margin-bottom: 12px;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #dce2ea;
+  border-radius: 6px;
+}
+
+.ticket-filter {
+  display: grid;
+  gap: 6px;
+}
+
+.ticket-filter label {
+  color: #344a62;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.ticket-filter select {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 36px 0 12px;
+  color: #11243c;
+  background: #ffffff;
+  border: 1px solid #aeb9c5;
+  border-radius: 4px;
+  font: inherit;
+}
+
+.ticket-filter select:focus-visible {
+  outline: 3px solid #f2a541;
+  outline-offset: 2px;
+}
+
+.result-count {
+  margin: 0 0 16px;
+  color: #52667d;
+  font-size: 0.8125rem;
+}
+
 .ticket-card__title {
   margin: 0;
   font-family: Georgia, 'Times New Roman', serif;
@@ -247,6 +292,10 @@
 
   .dashboard-heading .primary-action {
     width: 100%;
+  }
+
+  .ticket-filters {
+    grid-template-columns: 1fr;
   }
 
   .ticket-card__metadata {
