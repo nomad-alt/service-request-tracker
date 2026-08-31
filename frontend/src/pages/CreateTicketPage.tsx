@@ -72,7 +72,10 @@ function CreateTicketPage() {
             value={title}
             aria-describedby={errors.title ? "ticket-title-error" : undefined}
             aria-invalid={Boolean(errors.title)}
-            onChange={(event) => setTitle(event.currentTarget.value)}
+            onChange={(event) => {
+              setTitle(event.currentTarget.value);
+              setPendingRequest(null);
+            }}
           />
           {errors.title && (
             <p className="form-error" id="ticket-title-error">
@@ -92,7 +95,10 @@ function CreateTicketPage() {
               errors.description ? "ticket-description-error" : undefined
             }
             aria-invalid={Boolean(errors.description)}
-            onChange={(event) => setDescription(event.currentTarget.value)}
+            onChange={(event) => {
+              setDescription(event.currentTarget.value);
+              setPendingRequest(null);
+            }}
           />
           {errors.description && (
             <p className="form-error" id="ticket-description-error">
@@ -111,9 +117,10 @@ function CreateTicketPage() {
               errors.priority ? "ticket-priority-error" : undefined
             }
             aria-invalid={Boolean(errors.priority)}
-            onChange={(event) =>
-              setPriority(event.currentTarget.value as Priority | "")
-            }
+            onChange={(event) => {
+              setPriority(event.currentTarget.value as Priority | "");
+              setPendingRequest(null);
+            }}
           >
             <option value="">Select priority</option>
             <option value="LOW">Low</option>

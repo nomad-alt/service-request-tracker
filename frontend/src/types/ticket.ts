@@ -17,3 +17,7 @@ export interface TicketRequest {
   description: string
   priority: Priority
 }
+
+export interface UpdateTicketStatusRequest {
+  status: TicketStatus
+}
