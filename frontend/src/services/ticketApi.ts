@@ -41,6 +41,19 @@ export async function getTickets(
   return response.json() as Promise<Ticket[]>;
 }
 
+export async function getTicket(
+  id: number,
+  signal?: AbortSignal,
+): Promise<Ticket> {
+  const response = await fetch(`/api/tickets/${id}`, { signal });
+
+  if (!response.ok) {
+    throw await createResponseError(response);
+  }
+
+  return response.json() as Promise<Ticket>;
+}
+
 export async function createTicket(request: TicketRequest): Promise<Ticket> {
   const response = await fetch("/api/tickets", {
     method: "POST",
